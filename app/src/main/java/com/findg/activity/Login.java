@@ -8,6 +8,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 import com.findg.R;
+import com.findg.common.DateUtils;
 import com.firebase.client.AuthData;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
@@ -55,6 +56,8 @@ public class Login extends Activity {
                                     if (authData.getProviderData().containsKey("displayName")) {
                                         map.put("displayName", authData.getProviderData().get("displayName").toString());
                                     }
+                                    //last login time
+                                    map.put("lastLoginTime", DateUtils.getDateTimeStr(DateUtils.nowCST()));
                                     ref.child("users").child(authData.getUid()).setValue(map);
 
                                     startActivity(new Intent("com.findg.activity.Main"));

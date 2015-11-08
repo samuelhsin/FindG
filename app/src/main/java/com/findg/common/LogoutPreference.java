@@ -1,6 +1,6 @@
 package com.findg.common;
 
-import android.app.Dialog;
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.preference.DialogPreference;
@@ -9,7 +9,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import com.findg.R;
-import com.findg.activity.Main;
+import com.findg.activity.Login;
 import com.firebase.client.Firebase;
 
 /**
@@ -28,7 +28,15 @@ public class LogoutPreference extends DialogPreference {
     }
 
     public LogoutPreference(Context context, AttributeSet attrs) {
-        super(context, attrs, 0);
+        this(context, attrs, 0);
+    }
+
+    @Override
+    protected void onPrepareDialogBuilder(AlertDialog.Builder builder) {
+        builder.setTitle("Logout");
+        builder.setPositiveButton(null, null);
+        builder.setNegativeButton(null, null);
+        super.onPrepareDialogBuilder(builder);
     }
 
     @Override
@@ -39,9 +47,6 @@ public class LogoutPreference extends DialogPreference {
 
     @Override
     protected void onBindDialogView(final View view) {
-        super.onBindDialogView(view);
-
-        final Dialog dialog = getDialog();
 
         TextView textView = (TextView) view.findViewById(R.id.lblMessage);
 
@@ -59,10 +64,10 @@ public class LogoutPreference extends DialogPreference {
 
                 ref.unauth();
 
-                Intent intent = new Intent(view.getContext(), Main.class);
+                Intent intent = new Intent(view.getContext(), Login.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                intent.putExtra("LOGOUT", true);
-                //dialog.star.startActivity(intent);
+                intent.putExtra("EXIT", true);
+                view.getContext().startActivity(intent);
 
             }
         });
@@ -70,9 +75,11 @@ public class LogoutPreference extends DialogPreference {
         btnCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                dialog.cancel();
+                getDialog().cancel();
             }
         });
+
+        super.onBindDialogView(view);
 
     }
 }

@@ -40,7 +40,7 @@ public class Splash extends Activity {
                 } finally {
                     finish();
                     User user = getDBHelper().getSelf();
-                    startActivity(new Intent("com.findg.activity.Login"));
+                    startActivity(new Intent("com.findg.activity.Login"));//call by intent name
                 }
             }
         };

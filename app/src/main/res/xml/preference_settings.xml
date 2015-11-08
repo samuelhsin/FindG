@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+                  android:layout_height="match_parent"
+                  android:layout_width="match_parent">
+
+    <!-- self information-->
+    <PreferenceCategory
+            android:key="category_selfInfo"
+            android:title="Self Info">
+
+        <com.findg.common.AvatarPreference
+                android:key="pref_avatar"
+                android:title="Avatar"
+                android:summary="change avatar"
+                android:layout="@layout/preference_avatar"/>
+        <EditTextPreference
+                android:key="pref_nickname"
+                android:title="Nickname"
+                android:dialogTitle="Nickname"
+                android:defaultValue=""
+                android:ellipsize="end"
+                android:lines="1"
+                android:singleLine="true"
+                android:dialogMessage="please fill in the text box"
+                android:summary="display name"/>
+        <EditTextPreference
+                android:key="pref_description"
+                android:title="Description"
+                android:dialogTitle="Description"
+                android:defaultValue=""
+                android:dialogMessage="please fill in the text box"
+                android:summary="write something for yourself"/>
+        <SwitchPreference
+                android:key="pref_unit"
+                android:title="Unit"
+                android:summary="Choose CM/KG or Inches/Pounds"
+                android:defaultValue="true"/>
+
+        <ListPreference
+                android:key="pref_race"
+                android:title="Race"
+                android:dialogTitle="Choose Race"
+                android:entries="@array/race_entries"
+                android:entryValues="@array/race_values"
+                android:defaultValue="unknown"/>
+
+    </PreferenceCategory>
+
+    <!-- self information-->
+    <PreferenceCategory
+            android:key="category_sessionsInfo"
+            android:title="Sessions Info">
+        <com.findg.common.LogoutPreference
+                android:key="pref_logout"
+                android:title="Logout"
+                android:summary="logout and close app"
+                android:layout="@layout/preference_logout"/>
+
+    </PreferenceCategory>
+
+</PreferenceScreen>

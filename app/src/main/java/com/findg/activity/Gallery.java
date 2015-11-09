@@ -8,7 +8,7 @@ import android.util.Log;
 
 import java.io.File;
 
-public class Gallery extends Activity {
+public class Gallery extends BaseActivity {
     private final static int RESULT_SELECT_IMAGE = 100;
     public static final int MEDIA_TYPE_IMAGE = 1;
     private static final String TAG = Gallery.class.getSimpleName();

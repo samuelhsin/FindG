@@ -11,7 +11,7 @@ import com.j256.ormlite.android.apptools.OpenHelperManager;
 /**
  * Created by samuelhsin on 2015/10/24.
  */
-public class Splash extends Activity {
+public class Splash extends BaseActivity {
 
     /**
      * The thread to process splash screen events

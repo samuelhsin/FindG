@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import com.findg.R;
@@ -18,7 +17,7 @@ import org.apache.commons.lang.exception.ExceptionUtils;
 /**
  * Created by samuelhsin on 2015/10/24.
  */
-public class Main extends AppCompatActivity {
+public class Main extends BaseFragmentActivity {
 
     private static final String TAG = Main.class.getSimpleName();
 
@@ -26,7 +25,7 @@ public class Main extends AppCompatActivity {
 
     private Toolbar toolbar;
     private TabLayout tabLayout;
-    private ViewPager viewPager;
+
 
     private enum Tab {
         HOME(R.drawable.ic_home_white_24dp),
@@ -82,7 +81,8 @@ public class Main extends AppCompatActivity {
         }
     }
 
-    private void setupViewPager(ViewPager viewPager) {
+    @Override
+    protected void setupViewPager(ViewPager viewPager) {
 
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
 
@@ -117,6 +117,7 @@ public class Main extends AppCompatActivity {
         adapter.addFrag(settingsFragment, "Settings");
 
         viewPager.setAdapter(adapter);
+        //setCurrentFragment(homeFragment);
     }
 
     @Override

@@ -20,6 +20,10 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
         return mFragmentList.get(position);
     }
 
+    public int getIndex(Fragment fragment) {
+        return mFragmentList.indexOf(fragment);
+    }
+
     @Override
     public int getCount() {
         return mFragmentList.size();

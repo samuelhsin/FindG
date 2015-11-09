@@ -11,7 +11,7 @@ import android.widget.Toast;
 /**
  * Created by samuelhsin on 2015/10/30.
  */
-public class ImageSelector extends Activity {
+public class ImageSelector extends BaseActivity {
     private final int GALLERY_ACTIVITY_CODE = 200;
     private final int RESULT_CROP = 400;
 

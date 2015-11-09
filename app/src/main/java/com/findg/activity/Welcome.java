@@ -6,7 +6,7 @@ import android.os.Bundle;
 /**
  * Created by samuelhsin on 2015/10/24.
  */
-public class Welcome extends Activity{
+public class Welcome extends BaseActivity{
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

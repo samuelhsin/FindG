@@ -16,7 +16,7 @@ import java.io.File;
 /**
  * Created by samuelhsin on 2015/10/30.
  */
-public class ImageCropping extends Activity {
+public class ImageCropping extends BaseActivity {
 
     private ImageView resultView;
 

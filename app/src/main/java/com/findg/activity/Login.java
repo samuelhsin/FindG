@@ -19,7 +19,7 @@ import java.util.Map;
 /**
  * Created by samuelhsin on 2015/10/24.
  */
-public class Login extends Activity {
+public class Login extends BaseActivity {
 
     private EditText txtUsername;
     private EditText txtPassword;

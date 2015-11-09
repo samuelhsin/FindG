@@ -9,6 +9,12 @@
     <string name="one">one</string>
     <string name="confirm">Confirm</string>
     <string name="cancel">Cancel</string>
+    <string name="login">Login</string>
+    <string name="rememberMe">Remember Me</string>
+    <string name="empty">Empty</string>
+
+    <!--  Message -->
+    <string name="msgWaitPlease">Please, wait</string>
 
     <!--  Strings for possible PreferenceActivity Back/Next buttons -->
     <string name="back_button_label">Back</string>

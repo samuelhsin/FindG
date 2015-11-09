@@ -2,7 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:orientation="vertical"
               android:layout_width="match_parent"
-              android:layout_height="match_parent" android:weightSum="1">
+              android:layout_height="match_parent" android:weightSum="1"
+              android:theme="@style/loginStyle">
     <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content" android:layout_gravity="center_horizontal"
@@ -17,49 +18,53 @@
     </FrameLayout>
     <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="172dp" android:layout_weight="0.25">
-        <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="@string/username"
-                android:id="@+id/lblUsername" android:layout_alignParentTop="true"
-                android:layout_alignParentStart="true" android:layout_marginStart="28dp"
-                android:layout_marginTop="47dp"/>
+            android:layout_height="172dp" android:layout_weight="0.46"
+            android:padding="16dp">
+
         <EditText
-                android:layout_width="250dp"
+                android:id="@+id/txtUsername"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:hint="@string/username"
                 android:inputType="textEmailAddress"
-                android:ems="10"
-                android:id="@+id/txtUsername" android:layout_gravity="center_horizontal|top"
-                android:layout_marginStart="29dp" android:layout_alignBottom="@+id/lblUsername"
-                android:layout_toEndOf="@+id/lblUsername"/>
-        <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="@string/password"
-                android:id="@+id/lblPassword" android:layout_gravity="left|center_vertical"
-                android:layout_centerVertical="true" android:layout_alignStart="@+id/lblUsername"/>
+                android:maxLength="128"/>
+
         <EditText
-                android:layout_width="250dp"
+                android:id="@+id/txtPassword"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:hint="@string/password"
                 android:inputType="textPassword"
-                android:ems="10"
-                android:id="@+id/txtPassword" android:layout_gravity="center" android:layout_alignBottom="@+id/lblPassword"
-                android:layout_alignStart="@+id/txtUsername"/>
-        <Button
+                android:layout_marginTop="16dp"
+                android:maxLength="128" android:layout_below="@+id/txtUsername" android:layout_alignParentStart="true"/>
+
+        <CheckBox
+                android:id="@+id/ckbRememberMe"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/submit"
-                android:id="@+id/btnLogin" android:layout_gravity="center_horizontal|bottom"
-                android:layout_alignTop="@+id/btnRegister" android:layout_toStartOf="@+id/txtPassword"/>
+                android:text="@string/rememberMe"
+                android:textColor="@color/gray"
+                android:textSize="18sp"
+                android:layout_alignParentStart="true"
+                android:layout_below="@+id/txtPassword"
+                android:layout_marginTop="8dp"/>
+
         <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:id="@+id/btnLogin"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:text="@string/login"
+                android:layout_below="@+id/ckbRememberMe" android:layout_alignParentEnd="true"
+                android:layout_marginTop="24dp"/>
+
+        <Button
+                android:id="@+id/btnRegister"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
                 android:text="@string/register"
-                android:id="@+id/btnRegister" android:layout_gravity="right|bottom"
-                android:layout_marginStart="40dp" android:layout_alignParentBottom="true"
-                android:layout_alignStart="@+id/txtPassword"/>
+                android:layout_below="@+id/btnLogin"
+                android:layout_alignParentStart="true"
+                android:layout_marginTop="8dp"/>
+
     </RelativeLayout>
 </LinearLayout>

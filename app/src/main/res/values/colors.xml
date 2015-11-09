@@ -7,6 +7,9 @@
     <color name="windowBackground">#FFFFFF</color>
     <color name="navigationBarColor">#000000</color>
     <color name="highlight">#f3f3f3</color>
+    <color name="gray">#bebebe</color>
+    <color name="dark_gray">#1a1a1a</color>
+    <color name="white">#ffffff</color>
 
     <!-- Crop-->
     <color name="crop__button_bar">#f3f3f3</color>

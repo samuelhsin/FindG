@@ -12,6 +12,7 @@
     <string name="login">Login</string>
     <string name="rememberMe">Remember Me</string>
     <string name="empty">Empty</string>
+    <string name="search">Search</string>
 
     <!--  Message -->
     <string name="msgWaitPlease">Please, wait</string>

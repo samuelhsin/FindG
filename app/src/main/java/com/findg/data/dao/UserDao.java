@@ -23,8 +23,8 @@ public class UserDao extends BaseDaoImpl<User, Integer> implements IDao {
 
     @Override
     public int delete(User user) throws SQLException {
-        if (user.getContacts() != null) {
-            contactDao.delete(user.getContacts());
+        if (user.getContact() != null) {
+            contactDao.delete(user.getContact());
         }
         return super.delete(user);
     }

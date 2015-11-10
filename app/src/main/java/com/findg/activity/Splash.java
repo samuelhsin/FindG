@@ -25,7 +25,7 @@ public class Splash extends BaseActivity {
             public void run() {
                 try {
                     int waited = 0;
-                    while (waited < 5000) {
+                    while (waited < 1000) {
                         sleep(100);
                         waited += 100;
                     }

@@ -27,7 +27,7 @@ public class User implements IOrmModel {
     @SerializedName("avatarZip")
     private String avatarZip;
     @DatabaseField(foreignAutoCreate = true, index = true, uniqueCombo = true, foreign = true, foreignColumnName = "id")
-    private Contact contacts;
+    private Contact contact;
 
     public long getId() {
         return id;
@@ -77,11 +77,11 @@ public class User implements IOrmModel {
         this.sn = sn;
     }
 
-    public Contact getContacts() {
-        return contacts;
+    public Contact getContact() {
+        return contact;
     }
 
-    public void setContacts(Contact contacts) {
-        this.contacts = contacts;
+    public void setContact(Contact contact) {
+        this.contact = contact;
     }
 }

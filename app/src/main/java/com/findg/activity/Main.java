@@ -49,8 +49,6 @@ public class Main extends BaseFragmentActivity {
 
         setContentView(R.layout.activity_main);
 
-        databaseHelper = getDBHelper();
-
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(false);

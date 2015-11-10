@@ -45,6 +45,12 @@ public class Login extends BaseActivity {
             public void onClick(View v) {
                 String username = txtUsername.getText().toString();
                 String password = txtPassword.getText().toString();
+                if (username.isEmpty()) {
+                    username = "test@test.findg.com";
+                }
+                if (password.isEmpty()) {
+                    password = "test";
+                }
                 if (!username.isEmpty() && !password.isEmpty()) {
                     ref.authWithPassword(username, password,
                             new Firebase.AuthResultHandler() {

@@ -1,5 +1,10 @@
 package com.findg.common;
 
+import android.graphics.Bitmap;
+import com.findg.R;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.assist.ImageScaleType;
+
 public class Consts {
 
     // Friend list consts
@@ -7,12 +12,10 @@ public class Consts {
     public static final int FL_FRIENDS_PER_PAGE = 20;
     public static final int FL_FRIENDS_PER_PAGE_TEMP_VALUE = 90;
 
-
     public static final int CHATS_DIALOGS_PER_PAGE = 100;
     public static final int DIALOG_MESSAGES_PER_PAGE = 20;
     public static final String LAST_SENT_MESSAGE_ID = "_id";
     public static final String LAST_SENT_MESSAGE_DATE = "date_sent";
-
 
     public static final int ZERO_INT_VALUE = 0;
     public static final long ZERO_LONG_VALUE = 0L;
@@ -91,4 +94,26 @@ public class Consts {
     public static final String FB_REQUEST_PARAM_TITLE = "title";
 
     public static final String TYPE_OF_EMAIL = "message/rfc822";
+
+    // Q-municate release
+    public static final String QB_APP_ID = "13318";
+    public static final String QB_AUTH_KEY = "WzrAY7vrGmbgFfP";
+    public static final String QB_AUTH_SECRET = "xS2uerEveGHmEun";
+
+    public static final String QB_DOMAIN = "api.stage.quickblox.com";
+
+    // Universal Image Loader
+    public static final DisplayImageOptions UIL_DEFAULT_DISPLAY_OPTIONS = new DisplayImageOptions.Builder()
+            .cacheInMemory(true).imageScaleType(ImageScaleType.IN_SAMPLE_POWER_OF_2).cacheOnDisc(true).
+                    considerExifParams(true).bitmapConfig(Bitmap.Config.RGB_565).build();
+
+    public static final DisplayImageOptions UIL_USER_AVATAR_DISPLAY_OPTIONS = new DisplayImageOptions.Builder()
+            .showImageOnLoading(R.drawable.placeholder_user).showImageForEmptyUri(R.drawable.placeholder_user)
+            .showImageOnFail(R.drawable.placeholder_user).cacheOnDisc(true).cacheInMemory(true).considerExifParams(true).build();
+
+    public static final DisplayImageOptions UIL_GROUP_AVATAR_DISPLAY_OPTIONS = new DisplayImageOptions.Builder()
+            .showImageOnLoading(R.drawable.placeholder_group).showImageForEmptyUri(
+                    R.drawable.placeholder_group).showImageOnFail(R.drawable.placeholder_group).cacheOnDisc(
+                    true).cacheInMemory(true).considerExifParams(true).build();
+
 }

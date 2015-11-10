@@ -1,6 +1,5 @@
 package com.findg.activity;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -9,6 +8,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 import com.findg.R;
 import com.findg.common.DateUtils;
+import com.findg.data.model.User;
 import com.firebase.client.AuthData;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
@@ -58,9 +58,12 @@ public class Login extends BaseActivity {
                                     }
                                     //last login time
                                     map.put("lastLoginTime", DateUtils.getDateTimeStr(DateUtils.nowCST()));
-                                    ref.child("users").child(authData.getUid()).setValue(map);
-
-                                    startActivity(new Intent("com.findg.activity.Main"));
+                                    String userSn = authData.getUid();
+                                    ref.child("users").child(userSn).setValue(map);
+                                    User user = getDBHelper().getSelf(userSn);
+                                    Intent intent = new Intent("com.findg.activity.Main");
+                                    intent.putExtra("userSn", userSn);
+                                    startActivity(intent);
 
                                 }
 

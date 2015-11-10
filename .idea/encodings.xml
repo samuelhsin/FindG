@@ -5,6 +5,7 @@
     <file url="file://$PROJECT_DIR$/app/src/main/java/com/findg/activity/BaseActivity.java" charset="x-windows-950" />
     <file url="file://$PROJECT_DIR$/app/src/main/java/com/findg/common/Consts.java" charset="x-windows-950" />
     <file url="file://$PROJECT_DIR$/app/src/main/java/com/findg/common/ProgressDialog.java" charset="x-windows-950" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/com/findg/data/model/Contact.java" charset="x-windows-950" />
     <file url="file://$PROJECT_DIR$/app/src/main/java/com/findg/media/AssetsSoundResource.java" charset="x-windows-950" />
     <file url="file://$PROJECT_DIR$/app/src/main/java/com/findg/media/MediaPlayerManager.java" charset="x-windows-950" />
     <file url="file://$PROJECT_DIR$/app/src/main/java/com/findg/media/SoundResource.java" charset="x-windows-950" />

@@ -24,12 +24,12 @@ public abstract class BaseFragment extends Fragment {
         app = App.getInstance();
     }
 
-    public DatabaseHelper getDatabaseHelper() {
-        return databaseHelper;
+    protected DatabaseHelper getDatabaseHelper() {
+        return getBaseFragmentActivity().getDBHelper();
     }
 
-    public void setDatabaseHelper(DatabaseHelper databaseHelper) {
-        this.databaseHelper = databaseHelper;
+    protected String getUserSn() {
+        return getBaseFragmentActivity().getUserSn();
     }
 
     protected BaseFragmentActivity getBaseFragmentActivity() {

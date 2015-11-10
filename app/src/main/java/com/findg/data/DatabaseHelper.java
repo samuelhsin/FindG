@@ -66,35 +66,76 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
         return records;
     }
 
-    public User getSelf() {
+    public <C extends IOrmModel> boolean deleteAllRecords(Class<C> model) {
+        List<C> list = getAllRecords(model);
+        if (list != null && !list.isEmpty()) {
+            try {
+                Dao<C, Integer> dao = this.getDao(model);
+                for (C item : list) {
+                    dao.delete(item);
+                }
+            } catch (Exception e) {
+                Log.e(TAG, ExceptionUtils.getStackTrace(e));
+            }
+        }
+        return true;
+    }
+
+    public User createSelf(String sn) {
         User user = null;
         Dao<User, Integer> userDao;
         try {
-            userDao = this.getDao(User.class);
-            //userDao.setObjectCache(true);
-            QueryBuilder<User, Integer> builder = userDao.queryBuilder();
-            builder.limit(1l);
-            builder.orderBy("id", true);  // true for ascending, false for descending
-            List<User> users = userDao.query(builder.prepare());  // returns list of ten items
-            if (users != null && !users.isEmpty()) {
-                // just one user
-                user = users.get(0);
-                if (user.isFirstLoad()) {
-                    user.setFirstLoad(false);
-                    userDao.update(user);
+            if (sn != null && !sn.isEmpty()) {
+                userDao = this.getDao(User.class);
+                //userDao.setObjectCache(true);
+                QueryBuilder<User, Integer> builder = userDao.queryBuilder();
+                builder.limit(1l);
+                builder.orderBy("id", true);  // true for ascending, false for descending
+                List<User> users = userDao.query(builder.prepare());  // returns list of ten items
+                if (users != null && !users.isEmpty()) {
+                    deleteAllRecords(User.class);
                 }
-            } else {
+                //create self
                 user = new User();
                 user.setFirstLoad(true);
+                user.setSn(sn);
                 userDao.create(user);
+            } else {
+                throw new SQLException("error user sn!");
             }
         } catch (SQLException e) {
             Log.e(TAG, ExceptionUtils.getStackTrace(e));
-        } finally {
-            //if (userDao != null) {
-            //userDao.clearObjectCache();
-            //}
-            //this.close();
+        }
+        return user;
+    }
+
+    public User getSelf(String sn) {
+        User user = null;
+        Dao<User, Integer> userDao;
+        try {
+            if (sn != null && !sn.isEmpty()) {
+                userDao = this.getDao(User.class);
+                //userDao.setObjectCache(true);
+                QueryBuilder<User, Integer> builder = userDao.queryBuilder();
+                builder.limit(1l);
+                builder.orderBy("id", true);  // true for ascending, false for descending
+                builder.where().eq("sn", sn);
+                List<User> users = userDao.query(builder.prepare());  // returns list of ten items
+                if (users != null && !users.isEmpty()) {
+                    // just one user
+                    user = users.get(0);
+                    if (user.isFirstLoad()) {
+                        user.setFirstLoad(false);
+                        userDao.update(user);
+                    }
+                } else {
+                    user = createSelf(sn);
+                }
+            } else {
+                throw new SQLException("error user sn!");
+            }
+        } catch (SQLException e) {
+            Log.e(TAG, ExceptionUtils.getStackTrace(e));
         }
         return user;
     }
@@ -106,8 +147,6 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
             return true;
         } catch (Exception e) {
             Log.e(TAG, ExceptionUtils.getStackTrace(e));
-        } finally {
-            //this.close();
         }
         return false;
     }

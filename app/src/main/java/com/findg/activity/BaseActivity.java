@@ -9,6 +9,8 @@ import android.view.Window;
 import com.findg.App;
 import com.findg.R;
 import com.findg.common.ProgressDialog;
+import com.findg.data.DatabaseHelper;
+import com.j256.ormlite.android.apptools.OpenHelperManager;
 
 public abstract class BaseActivity extends Activity {
 
@@ -19,6 +21,8 @@ public abstract class BaseActivity extends Activity {
     protected boolean useDoubleBackPressed;
     protected boolean isNeedShowToastAboutDisconnected;
     private boolean doubleBackToExitPressedOnce;
+
+    private DatabaseHelper databaseHelper = null;
 
     public BaseActivity() {
         progress = ProgressDialog.newInstance(R.string.msgWaitPlease);
@@ -41,6 +45,7 @@ public abstract class BaseActivity extends Activity {
         requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
         super.onCreate(savedInstanceState);
         app = App.getInstance();
+        databaseHelper = createDBHelper();
     }
 
     @Override
@@ -53,6 +58,27 @@ public abstract class BaseActivity extends Activity {
     protected void onStop() {
         isNeedShowToastAboutDisconnected = false;
         super.onStop();
+        if (databaseHelper != null && databaseHelper.isOpen()) {
+            try {
+                databaseHelper.close();
+                OpenHelperManager.releaseHelper();
+                databaseHelper = null;
+            } catch (Exception e) {
+            }
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (databaseHelper != null && databaseHelper.isOpen()) {
+            try {
+                databaseHelper.close();
+                OpenHelperManager.releaseHelper();
+                databaseHelper = null;
+            } catch (Exception e) {
+            }
+        }
     }
 
     @Override
@@ -69,6 +95,17 @@ public abstract class BaseActivity extends Activity {
                 doubleBackToExitPressedOnce = false;
             }
         }, DOUBLE_BACK_DELAY);
+    }
+
+    private synchronized DatabaseHelper createDBHelper() {
+        if (databaseHelper == null) {
+            databaseHelper = OpenHelperManager.getHelper(this, DatabaseHelper.class);
+        }
+        return databaseHelper;
+    }
+
+    public DatabaseHelper getDBHelper() {
+        return databaseHelper;
     }
 
     protected void navigateToParent() {

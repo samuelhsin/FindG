@@ -1,9 +1,12 @@
 package com.findg.data.model;
 
+import com.findg.data.dao.UserDao;
 import com.google.gson.annotations.SerializedName;
 import com.j256.ormlite.field.DataType;
 import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.table.DatabaseTable;
 
+@DatabaseTable(tableName = "user", daoClass = UserDao.class)
 public class User implements IOrmModel {
     @DatabaseField(generatedId = true, dataType = DataType.LONG)
     @SerializedName("id")
@@ -11,15 +14,20 @@ public class User implements IOrmModel {
     @DatabaseField(dataType = DataType.STRING)
     @SerializedName("name")
     private String name;
+    @DatabaseField(dataType = DataType.STRING)
+    @SerializedName("sn")
+    private String sn;
     @DatabaseField(dataType = DataType.BOOLEAN)
     @SerializedName("firstLoad")
     private boolean firstLoad;
     @DatabaseField(columnDefinition = "LONGBLOB", dataType = DataType.BYTE_ARRAY)
     @SerializedName("avatar")
-    private byte[] avatar;
+    private transient byte[] avatar;
     @DatabaseField(dataType = DataType.STRING)
     @SerializedName("avatarZip")
     private String avatarZip;
+    @DatabaseField(foreignAutoCreate = true, index = true, uniqueCombo = true, foreign = true, foreignColumnName = "id")
+    private Contact contacts;
 
     public long getId() {
         return id;
@@ -59,5 +67,21 @@ public class User implements IOrmModel {
 
     public void setAvatarZip(String avatarZip) {
         this.avatarZip = avatarZip;
+    }
+
+    public String getSn() {
+        return sn;
+    }
+
+    public void setSn(String sn) {
+        this.sn = sn;
+    }
+
+    public Contact getContacts() {
+        return contacts;
+    }
+
+    public void setContacts(Contact contacts) {
+        this.contacts = contacts;
     }
 }

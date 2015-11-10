@@ -46,8 +46,7 @@ public class SettingsFragment extends PreferenceFragment {
 
     @Override
     public View onCreateView(LayoutInflater paramLayoutInflater, ViewGroup paramViewGroup, Bundle paramBundle) {
-
-        User user = this.getDatabaseHelper().getSelf();
+        User user = this.getDatabaseHelper().getSelf(getUserSn());
         AvatarPreference prefAvatar = (AvatarPreference) findPreference("pref_avatar");
         if (user.getAvatar() != null) {
             Bitmap avatar = ImageUtils.decodeBytes(user.getAvatar());
@@ -181,7 +180,7 @@ public class SettingsFragment extends PreferenceFragment {
                                 Uri croppedUri = intent.getParcelableExtra("croppedUri");
                                 Bitmap croppedBitmap = MediaStore.Images.Media.getBitmap(this.getContext().getContentResolver(), croppedUri);
                                 byte[] croppedBitmapBytes = ImageUtils.encodeBytes(croppedBitmap);
-                                User user = this.getDatabaseHelper().getSelf();
+                                User user = this.getDatabaseHelper().getSelf(getUserSn());
                                 user.setAvatar(croppedBitmapBytes);
                                 user.setAvatarZip(GZipUtils.compressToStr(croppedBitmapBytes));
                                 this.getDatabaseHelper().update(user);

@@ -22,10 +22,8 @@ public class Main extends BaseFragmentActivity {
     private static final String TAG = Main.class.getSimpleName();
 
     private DatabaseHelper databaseHelper = null;
-
     private Toolbar toolbar;
     private TabLayout tabLayout;
-
 
     private enum Tab {
         HOME(R.drawable.ic_home_white_24dp),
@@ -48,6 +46,7 @@ public class Main extends BaseFragmentActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_main);
 
         databaseHelper = getDBHelper();
@@ -89,31 +88,26 @@ public class Main extends BaseFragmentActivity {
         HomeFragment homeFragment = new HomeFragment();
         Bundle args = new Bundle();
         args.putInt("tabPosition", Tab.HOME.ordinal());
-        homeFragment.setDatabaseHelper(databaseHelper);
         adapter.addFrag(homeFragment, "Home");
 
         ChatFragment chatFragment = new ChatFragment();
         args = new Bundle();
         args.putInt("tabPosition", Tab.CHAT.ordinal());
-        chatFragment.setDatabaseHelper(databaseHelper);
         adapter.addFrag(chatFragment, "Chat");
 
         NearbyFragment nearbyFragment = new NearbyFragment();
         args = new Bundle();
         args.putInt("tabPosition", Tab.NEARBY.ordinal());
-        nearbyFragment.setDatabaseHelper(databaseHelper);
         adapter.addFrag(nearbyFragment, "Nearby");
 
         ContactFragment contactFragment = new ContactFragment();
         args = new Bundle();
         args.putInt("tabPosition", Tab.CONTACT.ordinal());
-        contactFragment.setDatabaseHelper(databaseHelper);
         adapter.addFrag(contactFragment, "Contact");
 
         SettingsFragment settingsFragment = new SettingsFragment();
         args = new Bundle();
         args.putInt("tabPosition", Tab.SETTINGS.ordinal());
-        settingsFragment.setDatabaseHelper(databaseHelper);
         adapter.addFrag(settingsFragment, "Settings");
 
         viewPager.setAdapter(adapter);
@@ -131,13 +125,6 @@ public class Main extends BaseFragmentActivity {
             } catch (Exception e) {
             }
         }
-    }
-
-    private DatabaseHelper getDBHelper() {
-        if (databaseHelper == null) {
-            databaseHelper = OpenHelperManager.getHelper(this, DatabaseHelper.class);
-        }
-        return databaseHelper;
     }
 
     @Override

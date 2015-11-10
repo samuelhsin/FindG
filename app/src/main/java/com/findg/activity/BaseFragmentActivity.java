@@ -13,6 +13,8 @@ import com.findg.App;
 import com.findg.R;
 import com.findg.common.ProgressDialog;
 import com.findg.common.ViewPagerAdapter;
+import com.findg.data.DatabaseHelper;
+import com.j256.ormlite.android.apptools.OpenHelperManager;
 
 /**
  * Created by samuelhsin on 2015/11/8.
@@ -27,6 +29,10 @@ public abstract class BaseFragmentActivity extends AppCompatActivity {
     protected Fragment currentFragment;
     protected boolean isNeedShowTostAboutDisconnected;
     private boolean doubleBackToExitPressedOnce;
+
+    private String userSn;
+
+    private DatabaseHelper databaseHelper = null;
 
     protected ViewPager viewPager;
 
@@ -52,7 +58,9 @@ public abstract class BaseFragmentActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
         super.onCreate(savedInstanceState);
+        userSn = getIntent().getExtras().getString("userSn");
         app = App.getInstance();
+        databaseHelper = createDBHelper();
     }
 
     @Override
@@ -65,6 +73,27 @@ public abstract class BaseFragmentActivity extends AppCompatActivity {
     protected void onStop() {
         isNeedShowTostAboutDisconnected = false;
         super.onStop();
+        if (databaseHelper != null && databaseHelper.isOpen()) {
+            try {
+                databaseHelper.close();
+                OpenHelperManager.releaseHelper();
+                databaseHelper = null;
+            } catch (Exception e) {
+            }
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (databaseHelper != null && databaseHelper.isOpen()) {
+            try {
+                databaseHelper.close();
+                OpenHelperManager.releaseHelper();
+                databaseHelper = null;
+            } catch (Exception e) {
+            }
+        }
     }
 
     @Override
@@ -81,6 +110,17 @@ public abstract class BaseFragmentActivity extends AppCompatActivity {
                 doubleBackToExitPressedOnce = false;
             }
         }, DOUBLE_BACK_DELAY);
+    }
+
+    private synchronized DatabaseHelper createDBHelper() {
+        if (databaseHelper == null) {
+            databaseHelper = OpenHelperManager.getHelper(this, DatabaseHelper.class);
+        }
+        return databaseHelper;
+    }
+
+    public DatabaseHelper getDBHelper() {
+        return databaseHelper;
     }
 
     protected void navigateToParent() {
@@ -141,6 +181,10 @@ public abstract class BaseFragmentActivity extends AppCompatActivity {
 
     protected void onSuccessAction(String action) {
 
+    }
+
+    public String getUserSn() {
+        return userSn;
     }
 
 }

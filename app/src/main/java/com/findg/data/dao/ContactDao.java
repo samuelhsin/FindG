@@ -18,13 +18,12 @@ public class ContactDao extends BaseDaoImpl<Contact, Integer> implements IDao {
     public ContactDao(ConnectionSource connectionSource, Class<Contact> dataClass) throws SQLException {
         super(connectionSource, dataClass);
         friendGroupDao = DaoManager.createDao(connectionSource, FriendGroup.class);
-
     }
 
     @Override
     public int delete(Contact contact) throws SQLException {
-        if (!contact.getAllCreatedFriendGroupsInThisContact().isEmpty()) {
-            friendGroupDao.delete(contact.getAllCreatedFriendGroupsInThisContact());
+        if (contact!=null && contact.getFriendGroups() != null && !contact.getFriendGroups().isEmpty()) {
+            friendGroupDao.delete(contact.getFriendGroups());
         }
         return super.delete(contact);
     }

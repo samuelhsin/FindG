@@ -18,13 +18,14 @@ public class UserDao extends BaseDaoImpl<User, Integer> implements IDao {
     public UserDao(ConnectionSource connectionSource, Class<User> dataClass) throws SQLException {
         super(connectionSource, dataClass);
         contactDao = DaoManager.createDao(connectionSource, Contact.class);
-
     }
 
     @Override
     public int delete(User user) throws SQLException {
-        if (user.getContact() != null) {
-            contactDao.delete(user.getContact());
+        if (user != null) {
+            if (user.getContacts() != null && !user.getContacts().isEmpty()) {
+                contactDao.delete(user.getContacts());
+            }
         }
         return super.delete(user);
     }

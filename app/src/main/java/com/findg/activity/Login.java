@@ -7,7 +7,11 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 import com.findg.R;
+import com.findg.common.Consts;
 import com.findg.common.DateUtils;
+import com.findg.data.model.Contact;
+import com.findg.data.model.Friend;
+import com.findg.data.model.FriendGroup;
 import com.findg.data.model.User;
 import com.firebase.client.AuthData;
 import com.firebase.client.Firebase;
@@ -67,6 +71,17 @@ public class Login extends BaseActivity {
                                     String userSn = authData.getUid();
                                     ref.child("users").child(userSn).setValue(map);
                                     User user = getDBHelper().getSelf(userSn);
+                                    //----for testing----
+                                    User testFriend = getDBHelper().getTestFriend();
+                                    Contact contact = (Contact) user.getContacts().toArray()[0];
+                                    if (!contact.isUserExistInContact(testFriend)) {
+                                        FriendGroup friendGroup = new FriendGroup(contact);
+                                        friendGroup.setFriendGroupType(Consts.FriendGroupType.User);
+                                        getDBHelper().create(friendGroup);
+                                        Friend friend = new Friend(friendGroup, testFriend);
+                                        getDBHelper().create(friend);
+                                    }
+                                    //-------------------
                                     Intent intent = new Intent("com.findg.activity.Main");
                                     intent.putExtra("userSn", userSn);
                                     startActivity(intent);

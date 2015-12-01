@@ -2,8 +2,10 @@ package com.findg.data.model;
 
 import com.findg.data.dao.UserDao;
 import com.google.gson.annotations.SerializedName;
+import com.j256.ormlite.dao.ForeignCollection;
 import com.j256.ormlite.field.DataType;
 import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.field.ForeignCollectionField;
 import com.j256.ormlite.table.DatabaseTable;
 
 @DatabaseTable(tableName = "user", daoClass = UserDao.class)
@@ -14,7 +16,7 @@ public class User implements IOrmModel {
     @DatabaseField(dataType = DataType.STRING)
     @SerializedName("name")
     private String name;
-    @DatabaseField(dataType = DataType.STRING)
+    @DatabaseField(canBeNull = false, dataType = DataType.STRING)
     @SerializedName("sn")
     private String sn;
     @DatabaseField(dataType = DataType.BOOLEAN)
@@ -26,8 +28,13 @@ public class User implements IOrmModel {
     @DatabaseField(dataType = DataType.STRING)
     @SerializedName("avatarZip")
     private String avatarZip;
-    @DatabaseField(foreignAutoCreate = true, index = true, uniqueCombo = true, foreign = true, foreignColumnName = "id")
-    private Contact contact;
+
+    @ForeignCollectionField(eager = true, maxEagerLevel = 2)
+    private ForeignCollection<Contact> contacts;
+
+    public User() {
+        super();
+    }
 
     public long getId() {
         return id;
@@ -77,11 +84,11 @@ public class User implements IOrmModel {
         this.sn = sn;
     }
 
-    public Contact getContact() {
-        return contact;
+    public ForeignCollection<Contact> getContacts() {
+        return contacts;
     }
 
-    public void setContact(Contact contact) {
-        this.contact = contact;
+    public void setContacts(ForeignCollection<Contact> contacts) {
+        this.contacts = contacts;
     }
 }

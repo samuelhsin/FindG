@@ -73,6 +73,10 @@ public class Consts {
 
     public static final int TOKEN_VALID_TIME_IN_MINUTES = 1;
 
+    public enum FriendGroupType {
+        User, Users
+    }
+
     public enum CALL_DIRECTION_TYPE {
         INCOMING, OUTGOING
     }

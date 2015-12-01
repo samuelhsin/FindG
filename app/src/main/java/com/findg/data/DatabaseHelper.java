@@ -3,8 +3,7 @@ package com.findg.data;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
-import com.findg.data.model.IOrmModel;
-import com.findg.data.model.User;
+import com.findg.data.model.*;
 import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper;
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.stmt.QueryBuilder;
@@ -31,6 +30,9 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 
             // create tables
             TableUtils.createTable(connectionSource, User.class);
+            TableUtils.createTable(connectionSource, Friend.class);
+            TableUtils.createTable(connectionSource, FriendGroup.class);
+            TableUtils.createTable(connectionSource, Contact.class);
 
         } catch (Exception e) {
             Log.e(TAG, ExceptionUtils.getStackTrace(e));
@@ -43,6 +45,9 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
             Log.i(DatabaseHelper.class.getName(), "onUpgrade");
 
             //drop all tables
+            TableUtils.dropTable(connectionSource, Contact.class, true);
+            TableUtils.dropTable(connectionSource, FriendGroup.class, true);
+            TableUtils.dropTable(connectionSource, Friend.class, true);
             TableUtils.dropTable(connectionSource, User.class, true);
 
             // after we drop the old databases, we create the new ones
@@ -83,23 +88,16 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 
     public User createSelf(String sn) {
         User user = null;
-        Dao<User, Integer> userDao;
         try {
             if (sn != null && !sn.isEmpty()) {
-                userDao = this.getDao(User.class);
-                //userDao.setObjectCache(true);
-                QueryBuilder<User, Integer> builder = userDao.queryBuilder();
-                builder.limit(1l);
-                builder.orderBy("id", true);  // true for ascending, false for descending
-                List<User> users = userDao.query(builder.prepare());  // returns list of ten items
-                if (users != null && !users.isEmpty()) {
-                    deleteAllRecords(User.class);
-                }
                 //create self
                 user = new User();
                 user.setFirstLoad(true);
                 user.setSn(sn);
-                userDao.create(user);
+                this.create(user);
+                //create contact
+                this.create(new Contact(user));
+                user = this.queryTopByObject(User.class, "sn", sn);
             } else {
                 throw new SQLException("error user sn!");
             }
@@ -109,24 +107,23 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
         return user;
     }
 
+    public User getTestFriend() {
+        return getUser("28c2e7d0-f7a7-4e3d-9541-4dc71d2f68f0");
+    }
+
     public User getSelf(String sn) {
+        return getUser(sn);
+    }
+
+    private User getUser(String sn) {
         User user = null;
-        Dao<User, Integer> userDao;
         try {
             if (sn != null && !sn.isEmpty()) {
-                userDao = this.getDao(User.class);
-                //userDao.setObjectCache(true);
-                QueryBuilder<User, Integer> builder = userDao.queryBuilder();
-                builder.limit(1l);
-                builder.orderBy("id", true);  // true for ascending, false for descending
-                builder.where().eq("sn", sn);
-                List<User> users = userDao.query(builder.prepare());  // returns list of ten items
-                if (users != null && !users.isEmpty()) {
-                    // just one user
-                    user = users.get(0);
+                user = this.queryTopByObject(User.class, "sn", sn);
+                if (user != null) {
                     if (user.isFirstLoad()) {
                         user.setFirstLoad(false);
-                        userDao.update(user);
+                        this.update(user);
                     }
                 } else {
                     user = createSelf(sn);
@@ -138,6 +135,58 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
             Log.e(TAG, ExceptionUtils.getStackTrace(e));
         }
         return user;
+    }
+
+    public <T extends IOrmModel> List<T> queryByObject(Class<T> clz, String field, Object foreignObject) {
+        try {
+            Dao dao = this.getDao(clz);
+            QueryBuilder<User, Integer> builder = dao.queryBuilder();
+            builder.orderBy("id", true);  // true for ascending, false for descending
+            builder.where().eq(field, foreignObject);
+            return dao.query(builder.prepare());  // returns list of ten items
+        } catch (Exception e) {
+            Log.e(TAG, ExceptionUtils.getStackTrace(e));
+        }
+        return null;
+    }
+
+    public <T extends IOrmModel> T queryTopByObject(Class<T> clz, String field, Object foreignObject) {
+        try {
+            Dao dao = this.getDao(clz);
+            QueryBuilder<User, Integer> builder = dao.queryBuilder();
+            builder.limit(1l);
+            builder.orderBy("id", true);  // true for ascending, false for descending
+            builder.where().eq(field, foreignObject);
+            List<T> list = dao.query(builder.prepare());  // returns list of ten items
+            if (list != null && !list.isEmpty()) {
+                return list.get(0);
+            }
+        } catch (Exception e) {
+            Log.e(TAG, ExceptionUtils.getStackTrace(e));
+        }
+        return null;
+    }
+
+    public boolean delete(IOrmModel model) {
+        try {
+            Dao dao = this.getDao(model.getClass());
+            dao.delete(model);
+            return true;
+        } catch (Exception e) {
+            Log.e(TAG, ExceptionUtils.getStackTrace(e));
+        }
+        return false;
+    }
+
+    public IOrmModel create(IOrmModel model) {
+        try {
+            Dao dao = this.getDao(model.getClass());
+            dao.create(model);
+            return model;
+        } catch (Exception e) {
+            Log.e(TAG, ExceptionUtils.getStackTrace(e));
+        }
+        return null;
     }
 
     public boolean update(IOrmModel model) {

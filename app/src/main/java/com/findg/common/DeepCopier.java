@@ -15,13 +15,10 @@ public final class DeepCopier extends Cloner {
         return singleton;
     }
 
+    @Override
     public <T> T deepClone(final T o, boolean threadSafe) {
-        if (threadSafe) {
-            synchronized (clonePriority) {
-                return super.deepClone(o);
-            }
-        } else {
-            return super.deepClone(o);
+        synchronized (clonePriority) {
+            return super.deepClone(o, threadSafe);
         }
     }
 

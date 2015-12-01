@@ -1,17 +1,19 @@
 package com.findg.data.model;
 
+import com.findg.common.Consts;
+import com.findg.data.dao.FriendGroupDao;
 import com.google.gson.annotations.SerializedName;
+import com.j256.ormlite.dao.ForeignCollection;
 import com.j256.ormlite.field.DataType;
 import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.field.ForeignCollectionField;
 import com.j256.ormlite.table.DatabaseTable;
-
-import java.util.List;
 
 /**
  * Created by samuelhsin on 2015/11/10.
  */
-@DatabaseTable(tableName = "friendGroup")
-public class FriendGroup implements IOrmModel  {
+@DatabaseTable(tableName = "friendGroup", daoClass = FriendGroupDao.class)
+public class FriendGroup implements IOrmModel {
 
     @DatabaseField(generatedId = true, dataType = DataType.LONG)
     @SerializedName("id")
@@ -19,9 +21,23 @@ public class FriendGroup implements IOrmModel  {
     @DatabaseField(dataType = DataType.STRING)
     @SerializedName("name")
     private String name;
-    @DatabaseField(dataType = DataType.BYTE_ARRAY)
-    @SerializedName("userList")
-    private transient List<User> userList;
+    @DatabaseField(dataType = DataType.ENUM_STRING)
+    @SerializedName("friendGroupType")
+    private Consts.FriendGroupType friendGroupType;
+    @DatabaseField(canBeNull = false, foreign = true)
+    @SerializedName("contact")
+    private Contact contact;
+    @ForeignCollectionField(eager = true, maxEagerLevel = 2)
+    private ForeignCollection<Friend> friends;
+
+    public FriendGroup() {
+        super();
+    }
+
+    public FriendGroup(Contact contact) {
+        this();
+        this.contact = contact;
+    }
 
     @Override
     public long getId() {
@@ -43,11 +59,27 @@ public class FriendGroup implements IOrmModel  {
         this.name = name;
     }
 
-    public List<User> getUserList() {
-        return userList;
+    public Consts.FriendGroupType getFriendGroupType() {
+        return friendGroupType;
     }
 
-    public void setUserList(List<User> userList) {
-        this.userList = userList;
+    public void setFriendGroupType(Consts.FriendGroupType friendGroupType) {
+        this.friendGroupType = friendGroupType;
+    }
+
+    public Contact getContact() {
+        return contact;
+    }
+
+    public void setContact(Contact contact) {
+        this.contact = contact;
+    }
+
+    public ForeignCollection<Friend> getFriends() {
+        return friends;
+    }
+
+    public void setFriends(ForeignCollection<Friend> friends) {
+        this.friends = friends;
     }
 }

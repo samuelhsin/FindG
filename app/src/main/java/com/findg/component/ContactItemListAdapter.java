@@ -8,9 +8,9 @@ import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.ImageView;
 import com.findg.common.Consts;
-import com.findg.common.DeepCopier;
 import com.findg.data.model.Contact;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import org.apache.commons.lang.SerializationUtils;
 
 public class ContactItemListAdapter extends BaseExpandableListAdapter {
 
@@ -25,13 +25,11 @@ public class ContactItemListAdapter extends BaseExpandableListAdapter {
     public ContactItemListAdapter(Context context, ContactItemOperationListener friendOperationListener, Contact contact) {
         this.context = context;
         this.contactItemOperationListener = friendOperationListener;
-        this.tempContact = DeepCopier.getInstance().deepClone(contact);
+        this.tempContact = (Contact) SerializationUtils.clone(contact);
         this.originalContact = contact;
         layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         resources = context.getResources();
     }
-
-
 
     public void setSearchCharacters(String searchCharacters) {
         this.searchCharacters = searchCharacters;

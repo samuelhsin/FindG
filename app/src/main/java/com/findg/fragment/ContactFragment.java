@@ -13,6 +13,8 @@ import com.findg.component.ContactItemListAdapter;
 import com.findg.component.ContactItemOperationListener;
 import com.findg.data.model.Contact;
 
+import java.util.Collection;
+
 /**
  * Created by samuelhsin on 2015/10/25.
  */
@@ -29,6 +31,7 @@ public class ContactFragment extends BaseFragment implements AbsListView.OnScrol
     /* contact item list adapter*/
     private ContactItemListAdapter contactItemListAdapter;
 
+    private Contact favorite;
     private Contact contact;
 
     public ContactFragment() {
@@ -53,6 +56,8 @@ public class ContactFragment extends BaseFragment implements AbsListView.OnScrol
         View view = inflater.inflate(R.layout.fragment_contact, container, false);
 
         initUI(view);
+
+        initContactList();
 
         return view;
     }
@@ -126,8 +131,22 @@ public class ContactFragment extends BaseFragment implements AbsListView.OnScrol
         return shareIntent;
     }
 
-    private void initAllUsers() {
-        contact = this.getDatabaseHelper().getSelf(getUserSn()).getContact();
+    private void initContactList() {
+        //friendGroupList.clear();
+        initFavorite();
+        initContact();
+        initContactItemListAdapter();
+    }
+
+    private void initFavorite() {
+
+    }
+
+    private void initContact() {
+        Collection collection = this.getDatabaseHelper().getSelf(getUserSn()).getContacts();
+        if (!collection.isEmpty()) {
+            contact = (Contact) collection.toArray()[0];
+        }
     }
 
     @Override

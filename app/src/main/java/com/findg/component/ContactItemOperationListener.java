@@ -2,5 +2,5 @@ package com.findg.component;
 
 public interface ContactItemOperationListener {
 
-    void onAddUserClicked(int userId);
+    void onAddUserClicked(long userId);
 }

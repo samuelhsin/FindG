@@ -1,4 +1,4 @@
-package com.findg.common;
+package com.findg.utils;
 
 import android.content.res.Resources;
 import android.graphics.Bitmap;

@@ -1,4 +1,4 @@
-package com.findg.common;
+package com.findg.utils;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;

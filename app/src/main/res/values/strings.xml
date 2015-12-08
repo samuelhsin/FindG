@@ -33,4 +33,27 @@
     <string name="crop__done">DONE</string>
     <string name="crop__cancel" tools:ignore="ButtonCase">CANCEL</string>
 
+    <!-- Friend List-->
+    <string name="frl_global_search">Global Search</string>
+    <string name="frl_friends">Friends</string>
+    <string name="frl_all_users">All Users</string>
+    <string name="frl_no_friends">Oops…\nYou don\'t have any friends,\ntap search icon to find them \nor invite new ones.</string>
+    <string name="frl_not_found_users">Sorry… no users</string>
+    <string name="frl_pending_status">Waiting…</string>
+    <string name="frl_pending_request_status">Pending contact request</string>
+    <string name="frl_column_header_name_requests">Requests</string>
+    <string name="frl_column_header_name_my_contacts">My Contacts</string>
+    <string name="frl_column_header_name_all_users">All Users</string>
+    <string name="frl_dlg_reject_friend">Do you really want to reject contact request from %1$s?</string>
+
+    <!-- Friend Details-->
+    <string name="frd_title">Details</string>
+    <string name="frd_default_status">I enjoy using Q-municate!</string>
+    <string name="frd_video_call">Video Call</string>
+    <string name="frd_audio_call">Audio Call</string>
+    <string name="frd_chat">Chat</string>
+    <string name="frd_mobile">MOBILE</string>
+    <string name="frd_dlg_remove_friend">Do you really want to delete %1$s from your contact list?</string>
+
+
 </resources>

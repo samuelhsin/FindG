@@ -1,4 +1,4 @@
-package com.findg.common;
+package com.findg.utils;
 
 import java.io.*;
 import java.util.zip.GZIPInputStream;

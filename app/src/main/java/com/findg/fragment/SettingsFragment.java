@@ -17,8 +17,8 @@ import android.view.ViewGroup;
 import com.findg.R;
 import com.findg.activity.ImageCropping;
 import com.findg.common.AvatarPreference;
-import com.findg.common.GZipUtils;
-import com.findg.common.ImageUtils;
+import com.findg.utils.GZipUtils;
+import com.findg.utils.ImageUtils;
 import com.findg.data.model.User;
 import org.apache.commons.lang.exception.ExceptionUtils;
 

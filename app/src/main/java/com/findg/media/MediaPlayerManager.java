@@ -5,7 +5,7 @@ import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.provider.Settings;
 import com.findg.R;
-import com.findg.common.ErrorUtils;
+import com.findg.utils.ErrorUtils;
 
 public class MediaPlayerManager {
 

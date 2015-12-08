@@ -9,6 +9,8 @@ import android.widget.ExpandableListView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import com.findg.R;
+import com.findg.data.model.Friend;
+import com.findg.utils.KeyboardUtils;
 import com.findg.component.ContactItemListAdapter;
 import com.findg.component.ContactItemOperationListener;
 import com.findg.data.model.Contact;
@@ -21,6 +23,8 @@ import java.util.Collection;
 public class ContactFragment extends BaseFragment implements AbsListView.OnScrollListener {
 
     private SearchView searchView;
+
+    private String constraint;
 
     /* contact item list */
     private int page = -1; // first loading
@@ -69,22 +73,49 @@ public class ContactFragment extends BaseFragment implements AbsListView.OnScrol
         emptyListTextView = (TextView) view.findViewById(R.id.empty_list_textview);
     }
 
+    private void initListeners() {
+        contactItemListView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                KeyboardUtils.hideKeyboard(getBaseFragmentActivity());
+                return false;
+            }
+        });
+
+        contactItemListView.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
+            @Override
+            public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
+                // nothing do
+                return true;
+            }
+        });
+
+        contactItemListView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
+            @Override
+            public boolean onChildClick(ExpandableListView parent, View v, int groupPosition,
+                                        int childPosition, long id) {
+                Friend friend = (Friend) contactItemListAdapter.getChild(groupPosition, childPosition);
+                return false;
+            }
+        });
+    }
+
     private void initContactItemListAdapter() {
         //sortLists();
 
         ContactItemOperationListener contactItemOperationListener = new ContactItemOperationListener() {
             @Override
-            public void onAddUserClicked(int userId) {
+            public void onAddUserClicked(long userId) {
 
             }
         };
         contactItemListAdapter = new ContactItemListAdapter(getBaseFragmentActivity(), contactItemOperationListener, contact);
-        //contactItemListAdapter.setSearchCharacters(constraint);
-        // contactItemListView.setAdapter(friendsListAdapter);
-        // contactItemListView.setGroupIndicator(null);
-        // contactItemListView.setOnScrollListener(this);
+        contactItemListAdapter.setSearchCharacters(constraint);
+        contactItemListView.setAdapter(contactItemListAdapter);
+        contactItemListView.setGroupIndicator(null);
+        contactItemListView.setOnScrollListener(this);
 
-        // expandAll();
+        expandAll();
     }
 
     @Override
@@ -112,6 +143,7 @@ public class ContactFragment extends BaseFragment implements AbsListView.OnScrol
         MenuItem searchItem = menu.findItem(R.id.action_search);
         searchView = (SearchView) searchItem.getActionView();
         searchView.setOnQueryTextListener(searchOnActionListener);
+        searchView.setMaxWidth(Integer.MAX_VALUE);
 
         //shared action
         // ShareActionProvider share = new ShareActionProvider(getContext());
@@ -149,6 +181,13 @@ public class ContactFragment extends BaseFragment implements AbsListView.OnScrol
         }
     }
 
+    private void expandAll() {
+        int count = contactItemListAdapter.getGroupCount();
+        for (int i = 0; i < count; i++) {
+            contactItemListView.expandGroup(i);
+        }
+    }
+
     @Override
     public void onScrollStateChanged(AbsListView view, int scrollState) {
 
@@ -162,12 +201,18 @@ public class ContactFragment extends BaseFragment implements AbsListView.OnScrol
     private class SearchOnActionListener implements SearchView.OnQueryTextListener {
         @Override
         public boolean onQueryTextSubmit(String query) {
+
+            constraint = query;
+
             return false;
         }
 
         @Override
-        public boolean onQueryTextChange(String newText) {
-            return false;
+        public boolean onQueryTextChange(String query) {
+
+            constraint = query;
+
+            return true;
         }
     }
 

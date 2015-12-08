@@ -2,20 +2,29 @@ package com.findg.component;
 
 import android.content.Context;
 import android.content.res.Resources;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.TextView;
+import com.findg.R;
 import com.findg.common.Consts;
 import com.findg.data.model.Contact;
+import com.findg.data.model.Friend;
+import com.findg.data.model.FriendGroup;
+import com.findg.data.model.User;
 import com.nostra13.universalimageloader.core.ImageLoader;
-import org.apache.commons.lang.SerializationUtils;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ContactItemListAdapter extends BaseExpandableListAdapter {
 
     private Context context;
-    private Contact tempContact;
+    private List<FriendGroup> friendGroups;
     private Contact originalContact;
     private ContactItemOperationListener contactItemOperationListener;
     private LayoutInflater layoutInflater;
@@ -25,7 +34,7 @@ public class ContactItemListAdapter extends BaseExpandableListAdapter {
     public ContactItemListAdapter(Context context, ContactItemOperationListener friendOperationListener, Contact contact) {
         this.context = context;
         this.contactItemOperationListener = friendOperationListener;
-        this.tempContact = (Contact) SerializationUtils.clone(contact);
+        this.friendGroups = (contact.getFriendGroups() != null) ? new ArrayList<>(contact.getFriendGroups()) : new ArrayList<FriendGroup>();
         this.originalContact = contact;
         layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         resources = context.getResources();
@@ -51,37 +60,96 @@ public class ContactItemListAdapter extends BaseExpandableListAdapter {
 
     @Override
     public Object getGroup(int groupPosition) {
-        return null;
+        return friendGroups.get(groupPosition);
     }
 
     @Override
     public Object getChild(int groupPosition, int childPosition) {
+        FriendGroup friendGroup = friendGroups.get(groupPosition);
+        if (friendGroup != null && friendGroup.getFriends() != null) {
+            List<Friend> friends = new ArrayList<>(friendGroup.getFriends());
+            return friends.get(childPosition);
+        }
         return null;
     }
 
     @Override
     public long getGroupId(int groupPosition) {
-        return 0;
+        return groupPosition;
     }
 
     @Override
     public long getChildId(int groupPosition, int childPosition) {
-        return 0;
+        return childPosition;
     }
 
     @Override
     public boolean hasStableIds() {
-        return false;
+        return true;
     }
 
     @Override
     public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
-        return null;
+        FriendGroup friendGroup = (FriendGroup) getGroup(groupPosition);
+
+        //By default the group is hidden
+        View hiddenView = new FrameLayout(context);
+
+        if (friendGroup.getFriends().isEmpty()) {
+            return hiddenView;
+        } else {
+            convertView = layoutInflater.inflate(R.layout.view_section_title_friends_list, null);
+        }
+
+        TextView headerName = (TextView) convertView.findViewById(R.id.list_title_textview);
+        headerName.setText("Test Friend Group");
+
+        return convertView;
     }
 
     @Override
-    public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
-        return null;
+    public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View view, ViewGroup parent) {
+        ViewHolder viewHolder;
+        Friend friend = (Friend) getChild(groupPosition, childPosition);
+        User user = friend != null ? friend.getUser() : null;
+
+        if (view == null) {
+            view = layoutInflater.inflate(R.layout.list_item_friend, null);
+
+            viewHolder = new ViewHolder();
+
+            viewHolder.avatarImageView = (RoundedImageView) view.findViewById(R.id.avatar_imageview);
+            viewHolder.fullNameTextView = (TextView) view.findViewById(R.id.name_textview);
+            viewHolder.statusTextView = (TextView) view.findViewById(R.id.status_textview);
+            viewHolder.addFriendImageView = (ImageView) view.findViewById(R.id.add_friend_imagebutton);
+            viewHolder.onlineImageView = (ImageView) view.findViewById(R.id.online_imageview);
+
+            view.setTag(viewHolder);
+        } else {
+            viewHolder = (ViewHolder) view.getTag();
+        }
+
+        if (user != null) {
+            if (user.getName() != null) {
+                viewHolder.fullNameTextView.setText(user.getName());
+            } else {
+                viewHolder.fullNameTextView.setText("Unknown");
+            }
+
+            //String avatarUrl = getAvatarUrlForUser(user);
+            //displayAvatarImage(avatarUrl, viewHolder.avatarImageView);
+
+            //FriendGroup friendGroup = (FriendGroup) getGroup(groupPosition);
+            //checkVisibilityItems(viewHolder, user, friendGroup);
+
+            initListeners(viewHolder, user.getId());
+
+            if (!TextUtils.isEmpty(searchCharacters)) {
+                TextViewHelper.changeTextColorView(context, viewHolder.fullNameTextView, searchCharacters);
+            }
+        }
+
+        return view;
     }
 
     @Override
@@ -89,15 +157,16 @@ public class ContactItemListAdapter extends BaseExpandableListAdapter {
         return false;
     }
 
-//    private void initListeners(ViewHolder viewHolder, final int userId) {
-//        viewHolder.addFriendImageView.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                contactItemOperationListener.onAddUserClicked(userId);
-//            }
-//        });
-//    }
-//    private String getAvatarUrlForUser(User user) {
+    private void initListeners(ViewHolder viewHolder, final long userId) {
+        viewHolder.addFriendImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                contactItemOperationListener.onAddUserClicked(userId);
+            }
+        });
+    }
+
+    //    private String getAvatarUrlForUser(User user) {
 //        return user.getAvatarUrl();
 //    }
 //
@@ -285,12 +354,12 @@ public class ContactItemListAdapter extends BaseExpandableListAdapter {
 //        notifyDataSetChanged();
 //    }
 //
-//    private static class ViewHolder {
-//
-//        public RoundedImageView avatarImageView;
-//        public TextView fullNameTextView;
-//        public TextView statusTextView;
-//        public ImageView addFriendImageView;
-//        public ImageView onlineImageView;
-//    }
+    private static class ViewHolder {
+
+        public RoundedImageView avatarImageView;
+        public TextView fullNameTextView;
+        public TextView statusTextView;
+        public ImageView addFriendImageView;
+        public ImageView onlineImageView;
+    }
 }

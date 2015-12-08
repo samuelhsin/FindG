@@ -8,7 +8,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 import com.findg.R;
 import com.findg.common.Consts;
-import com.findg.common.DateUtils;
+import com.findg.utils.DateUtils;
 import com.findg.data.model.Contact;
 import com.findg.data.model.Friend;
 import com.findg.data.model.FriendGroup;

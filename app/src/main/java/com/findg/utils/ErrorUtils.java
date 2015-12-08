@@ -1,9 +1,10 @@
-package com.findg.common;
+package com.findg.utils;
 
 import android.content.Context;
 import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
+import com.findg.common.Consts;
 
 /**
  * Created by samuelhsin on 2015/11/8.
